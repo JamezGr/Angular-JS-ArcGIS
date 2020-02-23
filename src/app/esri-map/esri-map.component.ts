@@ -22,6 +22,7 @@ import {
   OnDestroy
 } from "@angular/core";
 import { loadModules } from "esri-loader";
+import { DefaultWidgetsComponent } from "../defaultWidgets/default-widgets.component";
 import esri = __esri; // Esri TypeScript Types
 
 @Component({
@@ -104,7 +105,13 @@ export class EsriMapComponent implements OnInit, OnDestroy {
       };
 
       this._view = new EsriMapView(mapViewProperties);
-      await this._view.when();
+
+      var view = this._view;
+
+      await this._view.when(function() {
+        // load default widgets
+        DefaultWidgetsComponent.prototype.initializeDefaultWidgets(view);
+      });
       return this._view;
     } catch (error) {
       console.log("EsriLoader: ", error);
