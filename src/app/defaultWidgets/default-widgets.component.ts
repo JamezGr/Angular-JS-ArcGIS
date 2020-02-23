@@ -29,6 +29,10 @@ export class DefaultWidgetsComponent implements OnInit {
         "esri/widgets/Search",
       ]);
 
+      // HACKS: Filter Widget
+      const filterWidget = document.getElementsByTagName("app-filter-widget")[0];
+
+
       // add to Widgets List Here
       const [compass, fullscreen, home, layerlist, legend, scalebar, search ] = [
         new EsriCompass({ view: view }),
@@ -42,7 +46,7 @@ export class DefaultWidgetsComponent implements OnInit {
       // Widgets to Place on the Map
       // NB: For New Widgets, place in list you want to position in ie. top-right
       // NB: Place New Widget in the Order you want it to appear in
-      const top_left = [fullscreen, home, compass];
+      const top_left = [compass, fullscreen, home, filterWidget];
       const top_right = [search, layerlist, legend];
       const bottom_left = [];
       const bottom_right = [scalebar];
@@ -50,7 +54,12 @@ export class DefaultWidgetsComponent implements OnInit {
       // Add UI Elements to Given Position
       top_left.forEach(function(widget){
         view.ui.add(widget, "top-left");
-        console.log(widget._emitter.target.__proto__.declaredClass + " added");
+        if ( widget != filterWidget) {
+          console.log(widget._emitter.target.__proto__.declaredClass + " added");
+        } else {
+          console.log("esri.widgets.Filter added");
+        }
+
       });
 
       top_right.forEach(function(widget){
